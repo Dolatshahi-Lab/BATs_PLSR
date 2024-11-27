@@ -1,0 +1,39 @@
+%% Sample call to PLSR and PLSDA. %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% RE 9/1/22
+close all
+clear; clc
+
+%% PLSR %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+X=(readtable("x_input_3Donor.csv"));
+X=table2array(X(:,2:17));
+Y=readtable("y_input_3Donor.csv");
+n1=30;
+n2=n1+583;
+n3=n2+583;
+Y=table2array(Y([n1,n1+16,n1+96,n1+192,n1+288,n1+384,n2,n2+16,n2+96,n2+192,n2+288,n2+384,n3,n3+16,n3+96,n3+192,n3+288,n3+384],2));
+Y([2,8,14],:) = [];;
+varNames = {'CD8 TN','CD8 PD1','CD8 TIGIT','CD8 TIGITPD1','CD8 LAG3','CD8 LAG3PD1','CD8 LAG3TIGIT','CD8 TP','CD4 TN','CD4 PD1','CD4 TIGIT','CD4 TIGITPD1','CD4 LAG3','CD4 LAG3PD1','CD4 LAG3TIGIT','CD4 TP'}';
+nperm = 1000;
+ncomp = 2;
+Y_data_name = 'output';
+% No 0h
+% X([1,7,13],:) = []
+% Y([1,7,13],:) = []
+% No 4h
+% X([2,8,14],:) = []
+% X([2,8,14],:) = []
+% No 96h
+% X([6,12,18],:) = []
+% X([6,12,18],:) = []
+model_PLSR = PLSR_main(X,Y,ncomp,varNames,'yes','yes',{'kfold',5},nperm,Y_data_name);
+
+
+%% PLSDA %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% X = rand(10,10);
+% Y = logical([1 1 1 1 1 0 0 0 0 0])'; Y = double([Y ~Y]);
+% varNames = {'a','b','c','d','e','f','g','h','i','j'}';
+% nperm = 1000;
+% ncomp = 2;
+% categories = {'group 1','group 2'};
+% 
+% model_PLSDA = PLSDA_main(X,Y,ncomp,varNames,'no','yes',{'kfold',5},nperm,categories);
